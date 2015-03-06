@@ -1,15 +1,14 @@
 <template name="canvasGrid">
 <div draggable="false" class="ui">
-<p>ox:{{ originX }}&nbsp;oiy:{{ originY }} &nbsp; {{ displayCanvas }}</p> 
+<p>ox:{{ originX }}&nbsp;oiy:{{ originY }}</p> 
 <p>alphaLeft: {{ alphaLeft }} &nbsp; alphaTop: {{ alphaTop }}</p>
-<p>omegaLeft: {{ omegaLeft }} &nbsp; omegaTop: {{ omegaTop }}</p>
 </div>
 <div id="gridWindow" draggable="false" class="ui huge message page grid center aligned">
   <div id="gridContainer" style="overflow: hidden; height: 700px; width: 700px;">
-      <div id="alphaContainer" class="alpha{{ displayCanvas }}" 
+      <div id="alphaPositioner"  
            style="position: relative; top: {{ alphaTop }}px; left: {{ alphaLeft }}px">
            
-           <canvas id="alphaCanvas" width="{{ width }}" height="{{ height }}"></canvas>
+           <canvas id="photoCanvas" width="{{ width }}" height="{{ height }}"></canvas>
        
        </div>
  </div>

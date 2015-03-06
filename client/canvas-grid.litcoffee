@@ -10,18 +10,20 @@
         @SW = []
       
       quad: (x , y) ->
-          if ((x >= 0) and (y >= 0)) then return 'NE'
-          if ((x > 0) and (y < 0)) then return 'SE'
-          if ((x < 0) and (y > 0)) then return 'NW'
-          if ((x <= 0) and (y <= 0)) then return 'SW'
+          a = Math.abs x
+          b = Math.abs y
+          if ((x >= 0) and (y >= 0)) then return ['NE', a, b]
+          if ((x >= 0) and (y < 0)) then return ['SE', a, b]
+          if ((x < 0) and (y >= 0)) then return ['NW', a, b]
+          if ((x < 0) and (y < 0)) then return ['SW', a, b]
 
       set: (x, y, val)->
-        quad = @quad x, y
+        [quad, x, y] = @quad x, y
         if not @[quad][x]? then @[quad][x] = []
         @[quad][x][y] = val
     
       get: (x, y)->
-        quad = @quad x, y
+        [quad, x, y] = @quad x, y
         if not @[quad][x]? then return 'preload'
         if not @[quad][x][y]? then return 'preload'
         @[quad][x][y]
@@ -42,7 +44,6 @@
         instance = this
         instance.shift = (move)->
             canvas = ť().displayCanvas.get() + 'Shift'
-
             ť()[canvas].set move
 
         instance._height = $(window).height()
@@ -50,7 +51,6 @@
         instance.blockSize = new ReactiveVar 44
         instance.origin = new ReactiveVar [0,0]
         instance.alphaShift = new ReactiveVar [0,0]
-        instance.omegaShift = new ReactiveVar [0,0]
         instance.getBlockCount = ->
             blockSize = ť().blockSize.get()
             yblocks = Math.floor(ť()._height / blockSize)
@@ -59,22 +59,11 @@
             [yblocks, xblocks]
         instance.blockCount = instance.getBlockCount()
         instance.displayCanvas = new ReactiveVar 'alpha'
-        instance.swapCanvas = ->
-            ť().drawStaging 'alpha'
-            return
-            if ť().displayCanvas.get() is 'alpha'
-                ť().drawStaging 'omega'
-                ť().displayCanvas.set 'omega'
-            else
-                ť().drawStaging 'alpha'
-                ť().displayCanvas.set 'alpha'
-     
-        instance.drawStaging = (canvas)->
-            console.log 'draw', canvas
+        instance.drawPhotos = ->
+            console.log 'drawPhotos'
             blockSize = ť().blockSize.get()
             [rows, columns] = ť().blockCount
-            canvasId = canvas + 'Canvas'
-            c = document.getElementById canvasId
+            c = document.getElementById 'photoCanvas'
             ctx = c.getContext "2d"
             ctx.clearRect 0, 0, c.width, c.height
             [originX, originY] = ť().origin.get()
@@ -102,7 +91,7 @@
                     key = b.code + b.rotation
                     city.cityGrid.set b.street, b.avenue, key
                 console.log 'autorun'
-                ť().drawStaging 'alpha'
+                ť().drawPhotos()
                 subscriptionWait.stop()
 
             else
@@ -123,12 +112,6 @@
 
       alphaTop: ->
           ť().alphaShift.get()[1] - 100
-
-      omegaLeft: ->
-          ť().omegaShift.get()[0] - 100
-      
-      omegaTop: ->
-          ť().omegaShift.get()[1] - 100
 
       width: ->
           ť()._width
@@ -174,8 +157,8 @@
               ox -= dintX
               oy -= dintY
               ť().origin.set [ox, oy]
-              ť().swapCanvas()
               ť().shift [rX, rY]
+              ť().drawPhotos()
           true
       
       'dragend, mouseleave canvas': (e, t)->
