@@ -1,0 +1,13 @@
+div.alphaalpha {
+    border: yellow;
+    display: inline;
+}
+
+div.alphaomega {
+    display: none;
+}
+div.omegaomega {
+    border: red;
+    display: inline;
+}
+

@@ -1,0 +1,40 @@
+div.streetName {
+    position: relative;
+    left: -25px;
+}
+
+div.avenueName {
+    position: relative;
+    bottom: -50px;
+}
+
+.city-grid {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+.city-grid th {
+    padding: .5em;
+    text-align: left;
+}
+
+.city-grid td {
+    border-style: dashed;
+    border-color: yellow;
+    border-width: 1px;
+    background: gray;
+}
+
+.city-grid.twenty td {
+    width: 10px;
+    height: 10px;
+}
+
+.city-grid.hundred td {
+    width: 100px;
+    height: 100px;
+}
+
+.city-grid.fifty td {
+    width: 50px;
+    height: 50px;
+}
